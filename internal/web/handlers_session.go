@@ -206,6 +206,7 @@ type relationCompareFacts struct {
 	UniqueTagsTotal int
 	Format          string
 	Collection      string
+	PageCount       int
 }
 
 type compareTag struct {
@@ -232,9 +233,9 @@ func loadCompareFacts(cx *library.Gallery, leftID, rightID int64) (relationCompa
 func scanCompareFacts(cx *library.Gallery, id int64, dst *relationCompareFacts) error {
 	var addedAt, canonical string
 	if err := cx.DB.Read.QueryRow(
-		`SELECT COALESCE(width, 0), COALESCE(height, 0), file_size, ingested_at, canonical_path, series
+		`SELECT COALESCE(width, 0), COALESCE(height, 0), file_size, ingested_at, canonical_path, series, page_count
 		 FROM images WHERE id = ?`, id,
-	).Scan(&dst.ResolutionW, &dst.ResolutionH, &dst.FileSize, &addedAt, &canonical, &dst.Collection); err != nil {
+	).Scan(&dst.ResolutionW, &dst.ResolutionH, &dst.FileSize, &addedAt, &canonical, &dst.Collection, &dst.PageCount); err != nil {
 		return err
 	}
 	dst.AddedAt = humanISODate(addedAt)

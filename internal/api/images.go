@@ -1018,7 +1018,9 @@ func (h *Handler) createImage(w http.ResponseWriter, r *http.Request) {
 		landed, err = g.LandInPlace(r.Context(), in.imgPath, spec)
 	}
 	if err != nil {
-		switch library.LandStageOf(err) {
+		stage:=library.LandStageOf(err)
+		logx.Debugf("err at stage '%v': '%v'", stage, err)
+		switch stage {
 		case library.LandPlace:
 			contract.WriteError(w, http.StatusBadRequest, "invalid_request", err.Error())
 		case library.LandWrite:

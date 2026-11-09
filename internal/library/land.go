@@ -24,6 +24,11 @@ const (
 	LandIngest
 )
 
+func (me LandStage) String() string {
+	// for accurate logging of LandStages
+	return [...]string{"LandPlace", "LandWrite","LandSize","LandType","LandCheck","LandIngest"}[me]
+}
+
 // LandError names the step a landing failed at.
 type LandError struct {
 	Stage LandStage
